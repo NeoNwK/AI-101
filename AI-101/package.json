@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "log:prompt": "node scripts/log-prompt.mjs",
+    "log:realtime": "node scripts/log-realtime.mjs"
   },
   "dependencies": {
     "vue": "^3.5.32"
