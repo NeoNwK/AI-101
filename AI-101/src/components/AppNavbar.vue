@@ -1,32 +1,27 @@
 <template>
-  <nav class="app-navbar">
+  <nav :class="['app-navbar', { 'app-navbar--home': variant === 'home' }]">
     <div class="nav-inner">
-      <div class="logo" @click="$emit('go-home')">
-        <div class="logo-icon">
-          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-            <polygon points="18,2 34,10 34,26 18,34 2,26 2,10" stroke="#ffffff" stroke-width="2.5" fill="none" />
-            <polygon points="18,8 28,13 28,23 18,28 8,23 8,13" stroke="#ffffff" stroke-width="1.5" fill="rgba(255,255,255,0.15)" />
-            <circle cx="18" cy="18" r="4" fill="#ffffff" />
-          </svg>
-        </div>
-        <div class="logo-text">
-          <span class="logo-name">GEO HUB</span>
-          <span class="logo-sub">Educational Database</span>
-        </div>
-      </div>
+      <button type="button" class="logo" @click="$emit('go-home')">
+        <span class="logo-icon">◔</span>
+        <span class="logo-text">
+          <span class="logo-name">PALEO RESEARCH GROUP</span>
+          <span class="logo-sub">Department of Earth Sciences, Faculty of Science, Kasetsart University</span>
+        </span>
+      </button>
 
       <ul class="nav-links">
         <li><a href="#" :class="{ active: activePage === 'home' }" @click.prevent="$emit('go-home')">HOME</a></li>
-        <li><a href="#" :class="{ active: activePage === 'browse' }" @click.prevent="$emit('go-browse')">BROWSE</a></li>
-        <li><a href="#">GEOLOGY</a></li>
-        <li><a href="#">PALEONTOLOGY</a></li>
-        <li><a href="#">MINERAL</a></li>
-        <li><a href="#">GEMSTONES</a></li>
-        <li><a href="#">ABOUT US</a></li>
+        <li><a href="#" :class="{ active: activePage === 'about' }" @click.prevent="$emit('go-about')">ABOUT US</a></li>
+        <li><a href="#" :class="{ active: activePage === 'research' }" @click.prevent="$emit('go-research')">PUBLICATION</a></li>
+        <li><a href="#" :class="{ active: activePage === 'browse' }" @click.prevent="$emit('go-browse')">ALL SPECIMEN</a></li>
+        <li><a href="#" :class="{ active: activePage === 'contact' }" @click.prevent="$emit('go-contact')">CONTACT</a></li>
       </ul>
 
       <div class="nav-right">
-        <div class="search-box" v-if="showSearch">
+        <button v-if="showSearch" type="button" class="nav-icon-btn" aria-label="Toggle search" @click="searchOpen = !searchOpen">
+          ⌕
+        </button>
+        <div class="search-box" v-if="showSearch && searchOpen">
           <input
             type="text"
             :value="searchValue"
@@ -34,9 +29,7 @@
             :readonly="searchReadonly"
             @input="$emit('update:searchValue', $event.target.value)"
           />
-          <button type="button">🔍</button>
         </div>
-        <div class="avatar" v-if="showAvatar">👤</div>
       </div>
 
       <button
@@ -59,20 +52,16 @@
           :readonly="searchReadonly"
           @input="$emit('update:searchValue', $event.target.value)"
         />
-        <button type="button" aria-label="Search specimens">🔍</button>
+        <button type="button" aria-label="Search specimens">⌕</button>
       </div>
 
       <ul class="mobile-links">
         <li><a href="#" :class="{ active: activePage === 'home' }" @click.prevent="navigate('go-home')">HOME</a></li>
-        <li><a href="#" :class="{ active: activePage === 'browse' }" @click.prevent="navigate('go-browse')">BROWSE</a></li>
-        <li><a href="#">GEOLOGY</a></li>
-        <li><a href="#">PALEONTOLOGY</a></li>
-        <li><a href="#">MINERAL</a></li>
-        <li><a href="#">GEMSTONES</a></li>
-        <li><a href="#">ABOUT US</a></li>
+        <li><a href="#" :class="{ active: activePage === 'about' }" @click.prevent="navigate('go-about')">ABOUT US</a></li>
+        <li><a href="#" :class="{ active: activePage === 'research' }" @click.prevent="navigate('go-research')">PUBLICATION</a></li>
+        <li><a href="#" :class="{ active: activePage === 'browse' }" @click.prevent="navigate('go-browse')">ALL SPECIMEN</a></li>
+        <li><a href="#" :class="{ active: activePage === 'contact' }" @click.prevent="navigate('go-contact')">CONTACT</a></li>
       </ul>
-
-      <div class="mobile-avatar" v-if="showAvatar">👤 Account</div>
     </div>
   </nav>
 </template>
@@ -105,16 +94,22 @@ export default {
       type: Boolean,
       default: true,
     },
+    variant: {
+      type: String,
+      default: 'default',
+    },
   },
-  emits: ['go-home', 'go-browse', 'update:searchValue'],
+  emits: ['go-home', 'go-browse', 'go-about', 'go-research', 'go-contact', 'update:searchValue'],
   data() {
     return {
       mobileMenuOpen: false,
+      searchOpen: false,
     }
   },
   methods: {
     navigate(eventName) {
       this.mobileMenuOpen = false
+      this.searchOpen = false
       this.$emit(eventName)
     },
   },
@@ -122,15 +117,34 @@ export default {
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&display=swap');
 
 .app-navbar {
   position: sticky;
   top: 0;
-  z-index: 100;
-  background: #306e25;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12);
+  z-index: 120;
+  background:
+    linear-gradient(90deg, rgba(var(--color-accent-rgb), 0.92) 0%, rgba(var(--color-primary-rgb), 0.82) 100%);
+  border-bottom: 1px solid rgba(var(--color-secondary-rgb), 0.16);
+  box-shadow: 0 10px 28px rgba(var(--color-accent-rgb), 0.22);
+}
+
+.app-navbar--home {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: transparent;
+  border-bottom: 0;
+  box-shadow: none;
+}
+
+.app-navbar--home .nav-inner {
+  padding-top: 0;
+}
+
+.app-navbar--home .search-box {
+  background: rgba(22, 24, 19, 0.82);
 }
 
 .nav-inner {
@@ -139,40 +153,63 @@ export default {
   padding: 0 24px;
   display: flex;
   align-items: center;
-  gap: 28px;
-  height: 64px;
+  gap: 24px;
+  min-height: 84px;
 }
 
 .logo {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 14px;
+  padding: 0;
+  border: 0;
+  background: transparent;
   cursor: pointer;
+  color: #fff;
+}
+
+.logo-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(var(--color-secondary-rgb), 0.62);
+  color: var(--color-secondary);
+  font-size: 1.35rem;
+  line-height: 1;
 }
 
 .logo-text {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
 }
 
 .logo-name {
-  font-family: 'Barlow Condensed', sans-serif;
+  font-family: 'PT Serif', serif;
   font-weight: 800;
-  font-size: 1.1rem;
-  letter-spacing: 1px;
+  font-size: 1.38rem;
+  letter-spacing: 0.04em;
   color: #fff;
   line-height: 1;
 }
 
 .logo-sub {
-  font-size: 0.6rem;
-  color: rgba(255, 255, 255, 0.82);
+  margin-top: 3px;
+  max-width: 380px;
+  font-size: 0.62rem;
+  letter-spacing: 0.03em;
+  color: rgba(255, 255, 255, 0.74);
+  line-height: 1.3;
 }
 
 .nav-links {
   display: flex;
   list-style: none;
-  gap: 2px;
+  gap: 28px;
   flex: 1;
   justify-content: center;
   margin: 0;
@@ -180,22 +217,40 @@ export default {
 }
 
 .nav-links li a {
-  font-family: 'Barlow Condensed', sans-serif;
+  font-family: 'PT Serif', serif;
   font-weight: 700;
-  font-size: 0.8rem;
-  letter-spacing: 0.5px;
+  font-size: 0.86rem;
+  letter-spacing: 0.08em;
   color: rgba(255, 255, 255, 0.88);
   text-decoration: none;
-  padding: 6px 10px;
-  border-radius: 4px;
-  transition: color 0.2s, border-color 0.2s;
+  padding: 6px 0 10px;
+  border-radius: 0;
+  transition: color 0.2s ease, opacity 0.2s ease;
   border-bottom: 2px solid transparent;
+  position: relative;
 }
 
 .nav-links li a.active,
 .nav-links li a:hover {
   color: #fff;
-  border-bottom-color: #fff;
+}
+
+.nav-links li a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: rgba(var(--color-secondary-rgb), 0.92);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.2s ease;
+}
+
+.nav-links li a.active::after,
+.nav-links li a:hover::after {
+  transform: scaleX(1);
 }
 
 .nav-right {
@@ -203,6 +258,7 @@ export default {
   align-items: center;
   gap: 12px;
   margin-left: auto;
+  position: relative;
 }
 
 .mobile-menu-toggle,
@@ -210,20 +266,36 @@ export default {
   display: none;
 }
 
+.nav-icon-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  font-size: 1.05rem;
+  cursor: pointer;
+}
+
 .search-box {
+  position: absolute;
+  top: calc(100% + 14px);
+  right: 0;
   display: flex;
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  border-radius: 24px;
+  min-width: 280px;
+  border: 1px solid rgba(var(--color-secondary-rgb), 0.3);
+  border-radius: 16px;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(var(--color-accent-rgb), 0.94);
+  box-shadow: 0 14px 32px rgba(var(--color-accent-rgb), 0.24);
 }
 
 .search-box input {
   border: none;
   outline: none;
-  padding: 6px 14px;
-  font-size: 0.8rem;
-  width: 220px;
+  padding: 12px 14px;
+  font-size: 0.84rem;
+  width: 100%;
   color: #fff;
   background: transparent;
 }
@@ -232,33 +304,7 @@ export default {
   color: rgba(255, 255, 255, 0.72);
 }
 
-.search-box button {
-  border: none;
-  background: transparent;
-  color: #fff;
-  padding: 6px 12px;
-  cursor: pointer;
-}
-
-.avatar {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.16);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-  cursor: pointer;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-}
-
 @media (max-width: 1100px) {
-  .nav-inner {
-    height: 72px;
-  }
-
   .nav-links,
   .nav-right,
   .logo-sub {
@@ -272,9 +318,9 @@ export default {
     margin-left: auto;
     width: 42px;
     height: 42px;
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.24);
-    background: rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.06);
     color: #fff;
     font-size: 1.2rem;
     cursor: pointer;
@@ -284,8 +330,12 @@ export default {
     display: grid;
     gap: 16px;
     padding: 0 24px 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.14);
-    background: #306e25;
+    border-top: 1px solid rgba(var(--color-secondary-rgb), 0.16);
+    background: linear-gradient(90deg, rgba(var(--color-accent-rgb), 0.96) 0%, rgba(var(--color-primary-rgb), 0.86) 100%);
+  }
+
+  .app-navbar--home .mobile-panel {
+    background: linear-gradient(90deg, rgba(var(--color-accent-rgb), 0.96) 0%, rgba(var(--color-primary-rgb), 0.86) 100%);
   }
 
   .mobile-search {
@@ -334,7 +384,7 @@ export default {
     border-radius: 10px;
     color: rgba(255, 255, 255, 0.9);
     text-decoration: none;
-    font-family: 'Barlow Condensed', sans-serif;
+    font-family: 'PT Serif', serif;
     font-weight: 700;
     letter-spacing: 0.6px;
   }
@@ -344,14 +394,6 @@ export default {
     color: #fff;
   }
 
-  .mobile-avatar {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    color: #fff;
-    font-size: 0.95rem;
-    padding-top: 4px;
-  }
 }
 
 @media (max-width: 640px) {
@@ -365,7 +407,7 @@ export default {
   }
 
   .logo-name {
-    font-size: 1rem;
+    font-size: 1.1rem;
   }
 }
 </style>

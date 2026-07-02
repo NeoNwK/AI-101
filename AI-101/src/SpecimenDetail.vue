@@ -1,11 +1,21 @@
 <template>
   <div class="detail-page" v-if="specimen">
+    <ImageLightbox
+      v-if="lightboxImage"
+      :src="lightboxImage.src"
+      :alt="lightboxImage.alt"
+      @close="lightboxImage = null"
+    />
+
     <AppNavbar
       active-page="browse"
       :search-value="specimen.name"
       :search-readonly="true"
       @go-home="$emit('go-home')"
       @go-browse="$emit('back-to-specimens')"
+      @go-about="$emit('go-about')"
+      @go-research="$emit('go-research')"
+      @go-contact="$emit('go-contact')"
     />
 
     <div class="detail-shell">
@@ -38,7 +48,7 @@
           <div class="hero-image-frame">
             <div class="image-count">{{ activeImageIndex + 1 }} / {{ specimen.heroImages.length }}</div>
             <button class="gallery-nav prev" @click="stepImage(-1)">‹</button>
-            <img :src="activeImage.src" :alt="activeImage.alt" />
+            <img :src="activeImage.src" :alt="activeImage.alt" class="preview-image" @click="openImagePreview(activeImage.src, activeImage.alt)" />
             <button class="gallery-nav next" @click="stepImage(1)">›</button>
           </div>
 
@@ -86,11 +96,16 @@
               </div>
 
               <div class="cross-section-card">
-                <img :src="specimen.crossSection.image" :alt="`${specimen.name} section`" />
+                <img
+                  :src="specimen.crossSection.image"
+                  :alt="`${specimen.name} section`"
+                  class="preview-image"
+                  @click="openImagePreview(specimen.crossSection.image, `${specimen.name} section`)"
+                />
                 <div>
                   <h3>Cross Section</h3>
                   <p>{{ specimen.crossSection.description }}</p>
-                  <button class="secondary-btn">View All Images</button>
+                  <button class="secondary-btn" @click="currentTab = 'Gallery'">View All Images</button>
                 </div>
               </div>
             </template>
@@ -134,7 +149,7 @@
             <template v-else>
               <h3>References</h3>
               <ul class="reference-list">
-                <li>Geo Hub Internal Catalog Template</li>
+                <li>Paleo Research Group Internal Catalog Template</li>
                 <li>Teaching Collection Metadata Schema v1.0</li>
                 <li>Mock specimen record prepared for UI prototyping</li>
               </ul>
@@ -160,8 +175,8 @@
           </div>
 
           <div class="action-row">
-            <button class="primary-btn">Download Data Sheet</button>
-            <button class="secondary-btn">Cite This Specimen</button>
+            <button class="primary-btn" @click="downloadDataSheet">Download Data Sheet</button>
+            <button class="secondary-btn" @click="citeSpecimen">{{ citeLabel }}</button>
           </div>
 
           <div class="side-card">
@@ -227,21 +242,23 @@
 
 <script>
 import AppNavbar from './components/AppNavbar.vue'
+import ImageLightbox from './components/ImageLightbox.vue'
 import { getSpecimenDetail } from './data/specimens'
 
 export default {
   name: 'SpecimenDetail',
-  components: { AppNavbar },
+  components: { AppNavbar, ImageLightbox },
   props: {
     specimenId: {
       type: String,
       required: true,
     },
   },
-  emits: ['go-home', 'back-to-specimens', 'open-specimen'],
+  emits: ['go-home', 'go-about', 'go-research', 'go-contact', 'back-to-specimens', 'open-specimen'],
   data() {
     return {
       activeImageIndex: 0,
+      lightboxImage: null,
       currentTab: 'Overview',
       tabs: ['Overview', 'Properties', 'Composition', 'Gallery', 'References'],
     }
@@ -271,29 +288,33 @@ export default {
       if (index === 0) this.$emit('go-home')
       else this.$emit('back-to-specimens')
     },
+    openImagePreview(src, alt) {
+      this.lightboxImage = { src, alt }
+    },
   },
 }
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Barlow:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&display=swap');
 
 .detail-page {
   min-height: 100vh;
   background:
-    radial-gradient(circle at top right, rgba(61, 116, 83, 0.12), transparent 26%),
+    radial-gradient(circle at top right, rgba(var(--color-primary-rgb), 0.16), transparent 26%),
+    radial-gradient(circle at top left, rgba(var(--color-secondary-rgb), 0.12), transparent 22%),
     linear-gradient(180deg, #fbfcfa 0%, #f4f0e8 100%);
-  color: #18211a;
-  font-family: 'Barlow', sans-serif;
+  color: #253043;
+  font-family: 'PT Serif', serif;
 }
 
 .navbar {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: #306e25;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
   border-bottom: 1px solid rgba(255, 255, 255, 0.16);
-  box-shadow: 0 8px 24px rgba(18, 49, 13, 0.18);
+  box-shadow: 0 8px 24px rgba(var(--color-accent-rgb), 0.24);
 }
 
 .nav-inner {
@@ -319,7 +340,7 @@ export default {
 }
 
 .logo-name {
-  font-family: 'Barlow Condensed', sans-serif;
+  font-family: 'PT Serif', serif;
   font-size: 1.1rem;
   font-weight: 800;
   letter-spacing: 1px;
@@ -343,7 +364,7 @@ export default {
 }
 
 .nav-links li a {
-  font-family: 'Barlow Condensed', sans-serif;
+  font-family: 'PT Serif', serif;
   font-weight: 700;
   font-size: 0.8rem;
   letter-spacing: 0.5px;
@@ -430,9 +451,9 @@ export default {
 .summary-panel,
 .content-card,
 .side-card {
-  border: 1px solid rgba(21, 46, 26, 0.1);
+  border: 1px solid rgba(var(--color-primary-rgb), 0.1);
   background: rgba(255, 255, 255, 0.82);
-  box-shadow: 0 12px 32px rgba(39, 52, 36, 0.06);
+  box-shadow: 0 12px 32px rgba(var(--color-primary-rgb), 0.06);
   backdrop-filter: blur(12px);
 }
 
@@ -445,7 +466,7 @@ export default {
 .hero-image-frame {
   position: relative;
   min-height: 360px;
-  background: linear-gradient(180deg, #18231b 0%, #0d120e 100%);
+  background: linear-gradient(180deg, var(--color-accent) 0%, #27281b 100%);
 }
 
 .hero-image-frame img {
@@ -456,6 +477,10 @@ export default {
   display: block;
 }
 
+.preview-image {
+  cursor: zoom-in;
+}
+
 .image-count {
   position: absolute;
   top: 12px;
@@ -463,7 +488,7 @@ export default {
   z-index: 1;
   padding: 6px 10px;
   border-radius: 999px;
-  background: rgba(25, 90, 47, 0.88);
+  background: rgba(var(--color-primary-rgb), 0.9);
   color: #fff;
   font-weight: 700;
   font-size: 0.76rem;
@@ -504,11 +529,11 @@ export default {
   border-radius: 10px;
   padding: 0;
   overflow: hidden;
-  background: #edf0eb;
+  background: rgba(var(--color-primary-rgb), 0.08);
 }
 
 .thumb.active {
-  border-color: #1f6a39;
+  border-color: var(--color-primary);
 }
 
 .thumb img {
@@ -529,14 +554,14 @@ export default {
 .tab-btn {
   border-radius: 999px;
   padding: 7px 12px;
-  background: #edf3ee;
-  color: #44604c;
+  background: rgba(var(--color-primary-rgb), 0.08);
+  color: #586274;
   font-weight: 600;
   font-size: 0.82rem;
 }
 
 .tab-btn.active {
-  background: #1f6a39;
+  background: var(--color-primary);
   color: #fff;
 }
 
@@ -550,13 +575,13 @@ export default {
 .side-card h3,
 .section-head h2 {
   margin: 0 0 10px;
-  font-family: 'Barlow Condensed', sans-serif;
+  font-family: 'PT Serif', serif;
   font-size: 1.14rem;
 }
 
 .content-card p {
   margin: 0 0 14px;
-  color: #4d544c;
+  color: #5f6777;
   line-height: 1.55;
   font-size: 0.86rem;
 }
@@ -571,8 +596,8 @@ export default {
 .tag {
   padding: 7px 10px;
   border-radius: 999px;
-  background: #eff5f0;
-  color: #36513e;
+  background: rgba(var(--color-primary-rgb), 0.08);
+  color: #4f5a70;
   font-weight: 600;
   font-size: 0.8rem;
 }
@@ -591,7 +616,7 @@ export default {
 .composition-card,
 .gallery-card,
 .related-card {
-  border: 1px solid rgba(24, 33, 26, 0.1);
+  border: 1px solid rgba(var(--color-primary-rgb), 0.1);
   border-radius: 14px;
   background: #fff;
   overflow: hidden;
@@ -631,7 +656,7 @@ export default {
 .composition-card span,
 .related-card small {
   padding-bottom: 12px;
-  color: #6b726b;
+  color: #71798a;
   font-size: 0.8rem;
 }
 
@@ -661,7 +686,7 @@ export default {
   align-items: center;
   padding: 5px 8px;
   border-radius: 7px;
-  background: #1f6a39;
+  background: var(--color-primary);
   color: #fff;
   font-weight: 700;
   text-transform: uppercase;
@@ -671,7 +696,7 @@ export default {
 
 .summary-panel h1 {
   margin: 10px 0 6px;
-  font-family: 'Barlow Condensed', sans-serif;
+  font-family: 'PT Serif', serif;
   font-size: clamp(1.8rem, 3.4vw, 2.8rem);
   line-height: 0.95;
 }
@@ -681,13 +706,13 @@ export default {
   flex-wrap: wrap;
   gap: 10px;
   padding-bottom: 12px;
-  border-bottom: 1px solid rgba(24, 33, 26, 0.1);
-  color: #5d665e;
+  border-bottom: 1px solid rgba(var(--color-primary-rgb), 0.1);
+  color: #677082;
   font-size: 0.8rem;
 }
 
 .verified {
-  color: #1f6a39;
+  color: var(--color-primary);
   font-weight: 700;
 }
 
@@ -711,7 +736,7 @@ export default {
 
 .summary-row span,
 .detail-row span {
-  color: #6b726b;
+  color: #727a8b;
   font-size: 0.82rem;
 }
 
@@ -737,14 +762,14 @@ export default {
 }
 
 .primary-btn {
-  background: #1f6a39;
+  background: var(--color-primary);
   color: #fff;
 }
 
 .secondary-btn {
-  border: 1px solid rgba(24, 33, 26, 0.12);
+  border: 1px solid rgba(var(--color-primary-rgb), 0.12);
   background: #fff;
-  color: #243426;
+  color: #334155;
 }
 
 .side-card {
@@ -758,11 +783,11 @@ export default {
   min-height: 96px;
   border-radius: 12px;
   background:
-    linear-gradient(135deg, rgba(40, 104, 66, 0.12), rgba(40, 104, 66, 0.03)),
-    repeating-linear-gradient(45deg, rgba(31, 106, 57, 0.08) 0 16px, rgba(255, 255, 255, 0.4) 16px 32px);
+    linear-gradient(135deg, rgba(var(--color-primary-rgb), 0.12), rgba(var(--color-primary-rgb), 0.03)),
+    repeating-linear-gradient(45deg, rgba(var(--color-primary-rgb), 0.08) 0 16px, rgba(255, 255, 255, 0.4) 16px 32px);
   display: grid;
   place-items: center;
-  color: #30523a;
+  color: var(--color-accent);
   font-weight: 700;
   font-size: 0.8rem;
 }
@@ -779,7 +804,7 @@ export default {
 .reference-list {
   margin: 0;
   padding-left: 20px;
-  color: #4d544c;
+  color: #5f6777;
   line-height: 1.6;
   font-size: 0.84rem;
 }
@@ -789,8 +814,8 @@ export default {
   border-radius: 18px;
   padding: 16px;
   background: rgba(255, 255, 255, 0.82);
-  border: 1px solid rgba(24, 33, 26, 0.1);
-  box-shadow: 0 12px 32px rgba(39, 52, 36, 0.06);
+  border: 1px solid rgba(var(--color-primary-rgb), 0.1);
+  box-shadow: 0 12px 32px rgba(var(--color-primary-rgb), 0.06);
 }
 
 .section-head {
@@ -802,7 +827,7 @@ export default {
 }
 
 .section-head a {
-  color: #1f6a39;
+  color: var(--color-primary);
   text-decoration: none;
   font-weight: 700;
   font-size: 0.82rem;
@@ -822,7 +847,7 @@ export default {
 
 .related-badge {
   padding-top: 10px;
-  color: #1f6a39;
+  color: var(--color-primary);
   font-size: 0.68rem;
   font-weight: 700;
 }

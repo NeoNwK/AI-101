@@ -1,23 +1,30 @@
 :root {
+  --color-primary: #3d4b64;
+  --color-primary-dark: #313c50;
+  --color-primary-rgb: 61, 75, 100;
+  --color-secondary: #beab6d;
+  --color-secondary-rgb: 190, 171, 109;
+  --color-accent: #515031;
+  --color-accent-rgb: 81, 80, 49;
   --bg: #f5efe6;
   --surface: rgba(255, 250, 243, 0.88);
   --surface-strong: #fffdf9;
-  --surface-accent: #1f4d45;
-  --text: #2d2218;
-  --muted: #776555;
+  --surface-accent: var(--color-primary);
+  --text: #2f3745;
+  --muted: #6d6c67;
   --line: #dfd0c0;
-  --work: #2d7b72;
-  --private: #c46b3c;
+  --work: var(--color-primary);
+  --private: var(--color-secondary);
   --danger: #9f3f32;
   --shadow: 0 24px 60px rgba(77, 46, 24, 0.12);
   --radius: 24px;
-  font-family: 'Avenir Next', 'Segoe UI', sans-serif;
+  font-family: 'PT Serif', serif;
   line-height: 1.5;
   font-weight: 400;
   color: var(--text);
   background:
-    radial-gradient(circle at top left, rgba(224, 182, 120, 0.35), transparent 28%),
-    radial-gradient(circle at top right, rgba(56, 119, 109, 0.16), transparent 24%),
+    radial-gradient(circle at top left, rgba(var(--color-secondary-rgb), 0.28), transparent 28%),
+    radial-gradient(circle at top right, rgba(var(--color-primary-rgb), 0.16), transparent 24%),
     linear-gradient(180deg, #fbf6ef 0%, #f2e6d8 100%);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -64,11 +71,11 @@ button {
   gap: 10px;
   min-height: 40px;
   padding: 0 16px;
-  border: 1px solid rgba(45, 106, 63, 0.18);
+  border: 1px solid rgba(var(--color-primary-rgb), 0.18);
   border-radius: 999px;
   background: #fff;
-  color: #234f30;
-  font-family: 'Barlow Condensed', sans-serif;
+  color: var(--color-primary);
+  font-family: 'PT Serif', serif;
   font-size: 0.82rem;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -77,7 +84,7 @@ button {
 }
 
 .app-breadcrumb__back:hover {
-  background: #f5faf5;
+  background: rgba(var(--color-primary-rgb), 0.06);
 }
 
 .app-breadcrumb__trail {
@@ -199,7 +206,7 @@ button {
 }
 
 .stat-card.accent {
-  background: linear-gradient(135deg, #21463f 0%, #2f6d61 100%);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
   color: #f6efe4;
 }
 
@@ -267,7 +274,7 @@ button {
   margin-top: 6px;
   padding: 14px 18px;
   border-radius: 999px;
-  background: linear-gradient(135deg, #1f4d45 0%, #2d7b72 100%);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
   color: #fffaf2;
   font-weight: 700;
 }
@@ -338,12 +345,12 @@ button {
 }
 
 .category-badge.work {
-  background: rgba(45, 123, 114, 0.12);
+  background: rgba(var(--color-primary-rgb), 0.12);
   color: var(--work);
 }
 
 .category-badge.private {
-  background: rgba(196, 107, 60, 0.12);
+  background: rgba(var(--color-secondary-rgb), 0.18);
   color: var(--private);
 }
 
@@ -353,8 +360,8 @@ button {
 }
 
 .priority-badge {
-  background: rgba(31, 77, 69, 0.1);
-  color: #1f4d45;
+  background: rgba(var(--color-primary-rgb), 0.1);
+  color: var(--color-primary);
 }
 
 .priority-controls {
