@@ -12,8 +12,8 @@
       <ul class="nav-links">
         <li><a href="#" :class="{ active: activePage === 'home' }" @click.prevent="$emit('go-home')">HOME</a></li>
         <li><a href="#" :class="{ active: activePage === 'about' }" @click.prevent="$emit('go-about')">ABOUT US</a></li>
-        <li><a href="#" :class="{ active: activePage === 'research' }" @click.prevent="$emit('go-research')">PUBLICATION</a></li>
-        <li><a href="#" :class="{ active: activePage === 'browse' }" @click.prevent="$emit('go-browse')">ALL SPECIMEN</a></li>
+        <li><a href="#" :class="{ active: activePage === 'research' }" @click.prevent="$emit('go-research')">PUBLICATIONS</a></li>
+        <li><a href="#" :class="{ active: activePage === 'browse' }" @click.prevent="$emit('go-browse')">ALL SPECIMENS</a></li>
         <li><a href="#" :class="{ active: activePage === 'contact' }" @click.prevent="$emit('go-contact')">CONTACT</a></li>
       </ul>
 
@@ -58,8 +58,8 @@
       <ul class="mobile-links">
         <li><a href="#" :class="{ active: activePage === 'home' }" @click.prevent="navigate('go-home')">HOME</a></li>
         <li><a href="#" :class="{ active: activePage === 'about' }" @click.prevent="navigate('go-about')">ABOUT US</a></li>
-        <li><a href="#" :class="{ active: activePage === 'research' }" @click.prevent="navigate('go-research')">PUBLICATION</a></li>
-        <li><a href="#" :class="{ active: activePage === 'browse' }" @click.prevent="navigate('go-browse')">ALL SPECIMEN</a></li>
+        <li><a href="#" :class="{ active: activePage === 'research' }" @click.prevent="navigate('go-research')">PUBLICATIONS</a></li>
+        <li><a href="#" :class="{ active: activePage === 'browse' }" @click.prevent="navigate('go-browse')">ALL SPECIMENS</a></li>
         <li><a href="#" :class="{ active: activePage === 'contact' }" @click.prevent="navigate('go-contact')">CONTACT</a></li>
       </ul>
     </div>
@@ -117,7 +117,7 @@ export default {
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&display=swap');
+/* Fonts & tokens come from the central design system (style.css) */
 
 .app-navbar {
   position: sticky;

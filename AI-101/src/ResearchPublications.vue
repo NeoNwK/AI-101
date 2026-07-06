@@ -12,7 +12,7 @@
       @update:searchValue="setSearchQuery"
     />
 
-    <section class="research-hero">
+    <section class="research-hero" :style="{ '--hero-bg': `url('${heroBg}')` }">
       <div class="research-hero__inner">
         <div class="research-hero__copy">
           <p class="eyebrow">Team Research Archive</p>
@@ -191,6 +191,7 @@
 <script>
 import AppNavbar from './components/AppNavbar.vue'
 import { researchPublications } from './data/researchPublications'
+import heroBg from './assets/images (1).jpeg'
 
 const PER_PAGE = 6
 
@@ -210,6 +211,7 @@ export default {
     })
 
     return {
+      heroBg,
       searchQuery: '',
       selectedResearchers: [],
       selectedTag: 'All Tags',
@@ -346,7 +348,7 @@ export default {
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=PT+Serif:wght@700&family=Manrope:wght@400;500;600;700&display=swap');
+/* Fonts & tokens come from the central design system (style.css) */
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -361,10 +363,19 @@ export default {
 }
 
 .research-hero {
-  padding: 34px 24px 26px;
-  background:
-    linear-gradient(135deg, rgba(var(--color-primary-rgb), 0.97), rgba(var(--color-accent-rgb), 0.95)),
-    var(--color-accent);
+  position: relative;
+  overflow: hidden;
+  padding: 52px 24px;
+  min-height: 200px;
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-primary) 52%, var(--color-accent) 100%);
+}
+
+.research-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--hero-bg) center/cover;
+  opacity: 0.25;
 }
 
 .research-hero__inner,
@@ -375,6 +386,8 @@ export default {
 }
 
 .research-hero__inner {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
   gap: 26px;
@@ -383,7 +396,7 @@ export default {
 
 .eyebrow {
   margin-bottom: 10px;
-  font-family: 'Manrope', sans-serif;
+  font-family: 'PT Serif', serif;
   font-size: 0.78rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -399,7 +412,7 @@ export default {
 
 .research-hero__copy p:last-child {
   max-width: 52rem;
-  font-family: 'Manrope', sans-serif;
+  font-family: 'PT Serif', serif;
   color: rgba(255, 255, 255, 0.82);
   line-height: 1.8;
 }
@@ -431,7 +444,7 @@ export default {
 .pub-actions,
 .active-filter,
 .showing-text {
-  font-family: 'Manrope', sans-serif;
+  font-family: 'PT Serif', serif;
 }
 
 .hero-stat span {
@@ -497,7 +510,7 @@ export default {
   background: transparent;
   color: var(--color-primary);
   cursor: pointer;
-  font-family: 'Manrope', sans-serif;
+  font-family: 'PT Serif', serif;
   font-size: 0.8rem;
   font-weight: 700;
 }
@@ -731,7 +744,7 @@ export default {
   min-height: 28px;
   padding: 0 10px;
   border-radius: 999px;
-  font-family: 'Manrope', sans-serif;
+  font-family: 'PT Serif', serif;
   font-size: 0.78rem;
 }
 

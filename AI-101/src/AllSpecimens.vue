@@ -13,7 +13,7 @@
     />
 
     <!-- HERO BANNER -->
-    <section class="browse-hero">
+    <section class="browse-hero" :style="{ '--hero-bg': `url('${heroBg}')` }">
       <div class="browse-hero-inner">
         <div class="browse-hero-content">
           <h1>All Specimens</h1>
@@ -181,8 +181,16 @@
           </div>
         </div>
 
+        <!-- EMPTY STATE -->
+        <div v-if="filteredSpecimens.length === 0" class="empty-state">
+          <div class="empty-icon">🔍</div>
+          <h3>No specimens match your filters</h3>
+          <p>Try adjusting or clearing your filters to see more of the collection.</p>
+          <button class="apply-btn empty-clear" @click="clearFilters">↺ Clear All Filters</button>
+        </div>
+
         <!-- GRID VIEW -->
-        <div v-if="viewMode === 'grid'" class="specimens-grid">
+        <div v-else-if="viewMode === 'grid'" class="specimens-grid">
           <button
             class="specimen-card"
             v-for="sp in paginatedSpecimens"
@@ -215,7 +223,7 @@
         </div>
 
         <!-- PAGINATION -->
-        <div class="pagination">
+        <div v-if="filteredSpecimens.length > 0" class="pagination">
           <div class="pagination-controls">
             <button class="page-btn" :disabled="currentPage === 1" @click="changePage(currentPage - 1)">‹</button>
             <template v-for="p in paginationPages" :key="p">
@@ -251,13 +259,7 @@
       <div class="footer-inner">
         <div class="footer-brand">
           <div class="logo">
-            <div class="logo-icon">
-              <svg width="32" height="32" viewBox="0 0 36 36" fill="none">
-                <polygon points="18,2 34,10 34,26 18,34 2,26 2,10" stroke="#3d4b64" stroke-width="2.5" fill="none"/>
-                <polygon points="18,8 28,13 28,23 18,28 8,23 8,13" stroke="#3d4b64" stroke-width="1.5" fill="rgba(61,75,100,0.15)"/>
-                <circle cx="18" cy="18" r="4" fill="#3d4b64"/>
-              </svg>
-            </div>
+            <span class="logo-icon">◔</span>
             <div class="logo-text">
               <span class="logo-name">PALEO RESEARCH GROUP</span>
               <span class="logo-sub">Educational Database</span>
@@ -297,6 +299,7 @@
 <script>
 import AppNavbar from './components/AppNavbar.vue'
 import { allSpecimens } from './data/specimens'
+import heroBg from './assets/images (1).jpeg'
 
 const PER_PAGE = 12
 
@@ -316,6 +319,7 @@ export default {
   emits: ['go-home', 'go-about', 'go-research', 'go-contact', 'open-specimen'],
   data() {
     return {
+      heroBg,
       searchQuery: '',
       selectedCategories: [],
       selectedSubcategory: 'All Subcategories',
@@ -334,12 +338,12 @@ export default {
         { name: 'Geology', icon: '⛰️', count: allSpecimens.filter((item) => item.category === 'Geology').length },
         { name: 'Paleontology', icon: '🦕', count: allSpecimens.filter((item) => item.category === 'Paleontology').length },
         { name: 'Mineral', icon: '💎', count: allSpecimens.filter((item) => item.category === 'Mineral').length },
+        { name: 'Gemstones', icon: '💠', count: allSpecimens.filter((item) => item.category === 'Gemstones').length },
         { name: 'Petrology', icon: '🪨', count: allSpecimens.filter((item) => item.category === 'Petrology').length },
         { name: 'Gemology', icon: '💍', count: allSpecimens.filter((item) => item.category === 'Gemology').length },
         { name: 'Astronomy', icon: '🌠', count: allSpecimens.filter((item) => item.category === 'Astronomy').length },
         { name: 'Pedology', icon: '🌱', count: allSpecimens.filter((item) => item.category === 'Pedology').length },
         { name: 'Other', icon: '📚', count: allSpecimens.filter((item) => item.category === 'Other').length },
-        { name: 'Gemstones', icon: '💠', count: allSpecimens.filter((item) => item.category === 'Gemstones').length },
       ],
       colorOptions: [
         { value: 'red', label: 'Red', hex: '#e53e3e' },
@@ -488,7 +492,7 @@ export default {
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&display=swap');
+/* Fonts & tokens come from the central design system (style.css) */
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -510,7 +514,7 @@ export default {
 .browse-hero::before {
   content: '';
   position: absolute; inset: 0;
-  background: url('https://images.unsplash.com/photo-1518709766631-a6a7f45921c3?w=1400&q=60') center/cover;
+  background: var(--hero-bg) center/cover;
   opacity: 0.25;
 }
 .browse-hero-inner {
@@ -638,19 +642,31 @@ export default {
   font-size: 0.58rem; font-weight: 800; letter-spacing: 0.3px; color: #fff;
   font-family: 'PT Serif', serif;
 }
-.badge-geology { background: #444; }
-.badge-paleontology { background: #c0892a; }
-.badge-mineral { background: var(--color-primary); }
-.badge-petrology { background: #6a4d2f; }
-.badge-gemology { background: #9d4f88; }
-.badge-astronomy { background: #385b8a; }
-.badge-pedology { background: #8b6a35; }
-.badge-other { background: #59667a; }
-.badge-gemstones { background: #7c3aed; }
+.badge-geology { background: var(--cat-geology); }
+.badge-paleontology { background: var(--cat-paleontology); }
+.badge-mineral { background: var(--cat-mineral); }
+.badge-petrology { background: var(--cat-petrology); }
+.badge-gemology { background: var(--cat-gemology); }
+.badge-astronomy { background: var(--cat-astronomy); }
+.badge-pedology { background: var(--cat-pedology); }
+.badge-other { background: var(--cat-other); }
+.badge-gemstones { background: var(--cat-gemstones); }
 .spec-info { padding: 12px 14px; }
 .spec-name { font-weight: 700; font-size: 0.9rem; margin-bottom: 2px; }
 .spec-id { font-size: 0.72rem; color: #4f5c55; font-weight: 600; margin-bottom: 4px; }
 .spec-origin { font-size: 0.75rem; color: #666; }
+
+/* EMPTY STATE */
+.empty-state {
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  gap: 8px; padding: 56px 24px;
+  border: 1px dashed var(--border-strong); border-radius: var(--radius-lg);
+  background: var(--surface-muted);
+}
+.empty-icon { font-size: 2.4rem; }
+.empty-state h3 { font-family: var(--font-serif); font-weight: 800; font-size: 1.15rem; color: var(--ink); }
+.empty-state p { font-size: 0.85rem; color: var(--text-muted); max-width: 360px; }
+.empty-clear { max-width: 220px; margin-top: 10px; }
 
 /* LIST */
 .specimens-list { display: flex; flex-direction: column; gap: 10px; }
@@ -704,6 +720,14 @@ export default {
 .footer { background: #111; color: #aaa; padding: 52px 0 0; margin-top: 60px; }
 .footer-inner { max-width: 1280px; margin: 0 auto; padding: 0 24px 40px; display: flex; gap: 40px; }
 .footer-brand { flex: 0 0 220px; }
+.footer .logo { display: flex; align-items: center; gap: 12px; }
+.footer .logo-icon {
+  width: 40px; height: 40px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid rgba(var(--color-secondary-rgb), 0.62);
+  color: var(--color-secondary); font-size: 1.3rem; line-height: 1;
+  flex-shrink: 0;
+}
 .footer-brand .logo-name { color: #fff; }
 .footer-brand .logo-sub { color: #888; }
 .footer-brand p { font-size: 0.78rem; color: #888; margin-top: 12px; line-height: 1.6; }

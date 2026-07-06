@@ -261,6 +261,7 @@ export default {
       lightboxImage: null,
       currentTab: 'Overview',
       tabs: ['Overview', 'Properties', 'Composition', 'Gallery', 'References'],
+      citeLabel: 'Cite This Specimen',
     }
   },
   computed: {
@@ -291,12 +292,30 @@ export default {
     openImagePreview(src, alt) {
       this.lightboxImage = { src, alt }
     },
+    downloadDataSheet() {
+      // Mock export: use the browser print dialog to save the record as PDF.
+      window.print()
+    },
+    citeSpecimen() {
+      if (!this.specimen) return
+      const year = new Date().getFullYear()
+      const citation = `Paleo Research Group. ${this.specimen.name} (${this.specimen.id}). ${this.specimen.category} Teaching Collection, ${this.specimen.repository}. Retrieved ${year}.`
+      const done = () => {
+        this.citeLabel = 'Citation Copied ✓'
+        setTimeout(() => { this.citeLabel = 'Cite This Specimen' }, 2000)
+      }
+      if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(citation).then(done).catch(done)
+      } else {
+        done()
+      }
+    },
   },
 }
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&display=swap');
+/* Fonts & tokens come from the central design system (style.css) */
 
 .detail-page {
   min-height: 100vh;
@@ -306,128 +325,6 @@ export default {
     linear-gradient(180deg, #fbfcfa 0%, #f4f0e8 100%);
   color: #253043;
   font-family: 'PT Serif', serif;
-}
-
-.navbar {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
-  box-shadow: 0 8px 24px rgba(var(--color-accent-rgb), 0.24);
-}
-
-.nav-inner {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0 24px;
-  height: 64px;
-  display: flex;
-  align-items: center;
-  gap: 28px;
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-}
-
-.logo-text {
-  display: flex;
-  flex-direction: column;
-}
-
-.logo-name {
-  font-family: 'PT Serif', serif;
-  font-size: 1.1rem;
-  font-weight: 800;
-  letter-spacing: 1px;
-  color: #fff;
-  line-height: 1;
-}
-
-.logo-sub {
-  font-size: 0.6rem;
-  color: rgba(255, 255, 255, 0.78);
-}
-
-.nav-links {
-  list-style: none;
-  display: flex;
-  gap: 2px;
-  margin: 0;
-  padding: 0;
-  flex: 1;
-  justify-content: center;
-}
-
-.nav-links li a {
-  font-family: 'PT Serif', serif;
-  font-weight: 700;
-  font-size: 0.8rem;
-  letter-spacing: 0.5px;
-  color: rgba(255, 255, 255, 0.92);
-  text-decoration: none;
-  padding: 6px 10px;
-  border-radius: 4px;
-  transition: color 0.2s;
-}
-
-.nav-links li a.active {
-  color: #fff;
-  border-bottom: 2px solid #fff;
-}
-
-.nav-links li a:hover {
-  color: #fff;
-}
-
-.nav-right {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-left: auto;
-}
-
-.search-box {
-  display: flex;
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  border-radius: 24px;
-  overflow: hidden;
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.search-box input {
-  width: 200px;
-  border: none;
-  outline: none;
-  padding: 6px 14px;
-  font-size: 0.8rem;
-  background: transparent;
-  color: #fff;
-}
-
-.search-box button {
-  border: none;
-  background: transparent;
-  padding: 6px 12px;
-  cursor: pointer;
-  color: #fff;
-}
-
-.avatar {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.14);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-  cursor: pointer;
-  color: #fff;
 }
 
 .detail-shell {

@@ -293,7 +293,7 @@ export default {
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap');
+/* Fonts & tokens come from the central design system (style.css) */
 
 .about-page {
   min-height: 100vh;
@@ -327,7 +327,7 @@ export default {
 .story-card h3,
 .team-title h2,
 .panel-copy h3 {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: var(--font-serif);
 }
 
 .hero-copy h1 {
@@ -354,7 +354,7 @@ export default {
 .hero-copy p {
   max-width: 33rem;
   margin: 0;
-  font-family: 'Manrope', sans-serif;
+  font-family: var(--font-serif);
   font-size: 1.05rem;
   line-height: 1.9;
   color: #5f6677;
@@ -525,7 +525,7 @@ export default {
 .support-item p,
 .footer p,
 .footer a {
-  font-family: 'Manrope', sans-serif;
+  font-family: var(--font-serif);
 }
 
 .panel-copy p {
@@ -620,7 +620,7 @@ export default {
   position: relative;
   padding-left: 26px;
   margin-bottom: 10px;
-  font-family: 'Manrope', sans-serif;
+  font-family: var(--font-serif);
   color: #5f6677;
   line-height: 1.65;
 }
@@ -650,7 +650,7 @@ export default {
   border: 1px solid rgba(var(--color-primary-rgb), 0.1);
   border-radius: 14px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(var(--color-secondary-rgb), 0.08));
-  font-family: 'Manrope', sans-serif;
+  font-family: var(--font-serif);
   color: #4f5867;
   line-height: 1.55;
 }
@@ -700,7 +700,7 @@ export default {
 
 .team-label {
   margin: 0 0 16px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: var(--font-serif);
   font-size: 1.65rem;
   font-weight: 600;
   color: var(--color-accent);
@@ -743,7 +743,7 @@ export default {
   display: grid;
   place-items: center;
   color: #fff;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: var(--font-serif);
   font-size: 1.7rem;
   font-weight: 700;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
@@ -757,7 +757,7 @@ export default {
 
 .member-copy h3 {
   margin: 2px 0 6px;
-  font-family: 'Manrope', sans-serif;
+  font-family: var(--font-serif);
   font-size: 1rem;
   line-height: 1.35;
   font-weight: 700;
@@ -883,7 +883,7 @@ export default {
 .footer-logo strong,
 .footer-column h3 {
   display: block;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: var(--font-serif);
 }
 
 .footer-logo strong {
@@ -891,7 +891,7 @@ export default {
 }
 
 .footer-logo span {
-  font-family: 'Manrope', sans-serif;
+  font-family: var(--font-serif);
   font-size: 0.82rem;
   color: rgba(255, 255, 255, 0.62);
 }
@@ -925,7 +925,7 @@ export default {
   gap: 20px;
   padding: 18px 0 26px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
-  font-family: 'Manrope', sans-serif;
+  font-family: var(--font-serif);
   font-size: 0.82rem;
   color: rgba(255, 255, 255, 0.56);
 }

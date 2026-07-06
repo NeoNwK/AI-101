@@ -271,7 +271,7 @@ export default {
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap');
+/* Fonts & tokens come from the central design system (style.css) */
 
 .contact-page {
   min-height: 100vh;
@@ -342,7 +342,7 @@ export default {
   display: inline-block;
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  font-family: 'Manrope', sans-serif;
+  font-family: var(--font-serif);
   font-size: 0.72rem;
 }
 
@@ -357,7 +357,7 @@ export default {
 .campus-list__item h3,
 .visit-card__copy h3,
 .inquiry-item h3 {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: var(--font-serif);
 }
 
 .contact-hero__content h1 {
@@ -371,7 +371,7 @@ export default {
 .contact-hero__content p:last-child {
   max-width: 28rem;
   margin: 18px 0 0;
-  font-family: 'Manrope', sans-serif;
+  font-family: var(--font-serif);
   font-size: 1.08rem;
   line-height: 1.85;
   color: rgba(255, 255, 255, 0.86);
@@ -475,7 +475,7 @@ export default {
 .footer-column p,
 .footer-column a {
   margin: 0;
-  font-family: 'Manrope', sans-serif;
+  font-family: var(--font-serif);
   font-size: 0.98rem;
   line-height: 1.8;
   color: #5f6677;
@@ -496,7 +496,7 @@ export default {
   padding: 0 18px;
   border-radius: 12px;
   text-decoration: none;
-  font-family: 'Manrope', sans-serif;
+  font-family: var(--font-serif);
   font-size: 0.9rem;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -556,7 +556,7 @@ export default {
   border-radius: 14px;
   background: #fff;
   color: #253246;
-  font-family: 'Manrope', sans-serif;
+  font-family: var(--font-serif);
   font-size: 0.95rem;
 }
 
@@ -569,7 +569,7 @@ export default {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-family: 'Manrope', sans-serif;
+  font-family: var(--font-serif);
   font-size: 0.92rem;
   color: #5f6677;
 }
@@ -606,7 +606,7 @@ export default {
 .inquiry-item a {
   display: inline-block;
   margin-top: 10px;
-  font-family: 'Manrope', sans-serif;
+  font-family: var(--font-serif);
   font-size: 0.92rem;
   font-weight: 700;
   color: var(--color-primary);
@@ -681,7 +681,7 @@ export default {
 .footer-logo strong,
 .footer-column h3 {
   display: block;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: var(--font-serif);
 }
 
 .footer-logo strong {
@@ -689,7 +689,7 @@ export default {
 }
 
 .footer-logo span {
-  font-family: 'Manrope', sans-serif;
+  font-family: var(--font-serif);
   font-size: 0.82rem;
   color: rgba(255, 255, 255, 0.62);
 }
@@ -724,7 +724,7 @@ export default {
   gap: 20px;
   padding: 18px 0 26px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
-  font-family: 'Manrope', sans-serif;
+  font-family: var(--font-serif);
   font-size: 0.82rem;
   color: rgba(255, 255, 255, 0.56);
 }

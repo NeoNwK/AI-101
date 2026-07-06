@@ -264,7 +264,7 @@ const MOTIFS: Record<MotifName, (ink: string, accent: string) => string> = {
     }
     return `<path d="M600 200 C 760 200 860 320 850 470 C 842 620 720 700 580 692 C 430 684 350 560 372 420 C 388 300 470 210 600 200 Z" fill="${ink}" fill-opacity="0.16" stroke="${ink}" stroke-width="8" stroke-linejoin="round"/>${craters}`
   },
-  soil(ink, accent) {
+  soil(ink, _accent) {
     const bands: [number, number, number][] = [[160, 250, 0.22], [250, 400, 0.14], [400, 570, 0.24], [570, 748, 0.16]]
     let out = ''
     for (const [y0, y1, op] of bands) out += `<rect x="80" y="${y0}" width="1040" height="${y1 - y0}" fill="${ink}" fill-opacity="${op}"/>`
@@ -461,6 +461,13 @@ export function getSpecimenById(id: string) {
   return summaries.find((specimen) => specimen.id === id) ?? null
 }
 
+function mockCoordinates(id: string) {
+  const n = parseInt(id.replace(/\D/g, ''), 10) || 0
+  const lat = ((n * 7.3) % 130) - 55
+  const lon = ((n * 11.7) % 340) - 170
+  return `${Math.abs(lat).toFixed(4)}° ${lat >= 0 ? 'N' : 'S'}, ${Math.abs(lon).toFixed(4)}° ${lon >= 0 ? 'E' : 'W'}`
+}
+
 export function getSpecimenDetail(id: string) {
   const specimen = getSpecimenById(id)
   if (!specimen) return null
@@ -525,7 +532,7 @@ export function getSpecimenDetail(id: string) {
       ['Country', specimen.origin],
       ['Region', 'Reference Teaching Collection'],
       ['Locality', `${specimen.origin} Study Area`],
-      ['Coordinates', '64.6355 N, 21.7300 W'],
+      ['Coordinates', mockCoordinates(specimen.id)],
     ],
     additionalInformation: [
       ['Texture', specimen.category === 'Geology' ? 'Aphanitic to porphyritic' : 'Reference classroom mock'],
